@@ -2,6 +2,12 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.*;
 
+/**
+ * The Menu class is responsible for displaying numbers, marking them when clicked and resetting the view when a new round starts
+ * Also responsible for taking inputs from the user, checking validity of the input and parsing it to the game
+ *
+ * @author Tobias Laursen
+ */
 class Menu {
     //Constants
     private int counter = 0;
@@ -26,7 +32,7 @@ class Menu {
 
     /**
      * Constructor for the menu
-     * Takes a game as parameter and draws its sheet
+     * @param game - The game provides the numbers to be drawn
      */
     Menu(Game game) {
         this.game = game;
@@ -38,6 +44,7 @@ class Menu {
 
     /**
      * The redraw method draws the whole menu from scratch
+     * Used in initial setup, but also for reset
      */
     private void redraw() {
         counter = 0;
@@ -67,12 +74,19 @@ class Menu {
         frame.setVisible(true);
     }
 
+    /**
+     * Resets the playbuttons background colo to gray
+     */
     private void resetPlayButtonsColor() {
         for (JButton b : playButtons) {
             b.setBackground(Color.GRAY);
         }
     }
 
+    /**
+     * Checks for a sheet in the game, if there is a sheet it is drawn
+     * if there is not we request an input from the user
+     */
     private void drawPlaySheet() {
         if (game.getSheet() == null) {
             createInputFrame();
@@ -81,6 +95,9 @@ class Menu {
         }
     }
 
+    /**
+     * Next 3 methods are for setting up the menu buttons, their functions and adding them to the menupanel
+     */
     private void createMenuButtons() {
         reset = new JButton("Reset");
         addSheet = new JButton("Add a new sheet");
@@ -104,6 +121,9 @@ class Menu {
         quit.addActionListener(actionEvent -> System.exit(0));
     }
 
+    /**
+     * Next 3 methods are for setting up the 15 play buttons, their functions and adding them to the gamepanel
+     */
     private void createPlayButtons() {
         int[] sheet = game.getSheet().getSheetNumbers();
         button1 = new JButton(String.valueOf(sheet[0]));
@@ -153,12 +173,20 @@ class Menu {
         }
     }
 
+    /**
+     * Displays the bingo banko dialog when we have 5, 10 and 15 numbers
+     */
     private void bingoBanko() {
         if (counter % 5 == 0) {
             JOptionPane.showMessageDialog(frame, "BINGO BANKO!!!");
         }
     }
 
+    /**
+     * Takes sheet input from user
+     * Makes sure there are 15 unique numbers in the interval 1 - 90
+     * Uses the helper methods checkDuplicates() and allowedNumbers() to check validity
+     */
     private void createInputFrame() {
         frame.setVisible(false);
         String userInput = JOptionPane.showInputDialog("Enter your 15 numbers, space separated");
@@ -168,7 +196,7 @@ class Menu {
         } else if (userInput == null) {
             redraw();
         } else {
-            int[] input = stringArrayToIntArray(userInput.split("\\s+"));
+            int[] input = stringArrayToIntArray(userInput.split("\\s+")); //Splits a whitespaces
 
             boolean correctAmountOfNumbers = input.length == 15;
             boolean duplicates = !checkDuplicates(input);
@@ -187,6 +215,11 @@ class Menu {
         firstRun = false;
     }
 
+    /**
+     * Helper method to convert the user input to a number array, used in checking validity of input
+     * @param input - The String array we get from the user
+     * @return - The array as integers
+     */
     private int[] stringArrayToIntArray(String[] input) {
         int[] output = new int[input.length];
 
@@ -197,6 +230,11 @@ class Menu {
         return output;
     }
 
+    /**
+     * Makes sure the input numbers are in the range 1 - 90
+     * @param input - The integer array we are checking
+     * @return - True if the input is valid, and false if it is not
+     */
     private boolean allowedNumbers(int[] input) {
         boolean returnBool = true;
 
@@ -209,6 +247,11 @@ class Menu {
         return returnBool;
     }
 
+    /**
+     * Checks the array for duplicates by turning into a set
+     * @param input - The integer array we are checking
+     * @return - True if there are no duplicates, false if there are
+     */
     private boolean checkDuplicates(int[] input) {
         HashSet<Integer> numberSet = new HashSet<>();
 

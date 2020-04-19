@@ -6,7 +6,7 @@ class Loader {
 
     String[] loadPreviousSheet() {
         try {
-            File file = new File("PreviousSheet.txt");
+            File file = new File("../PreviousSheet.txt");
             Scanner scanner = new Scanner(file);
 
             String currentLine = scanner.nextLine();
@@ -36,7 +36,7 @@ class Loader {
         System.out.println("Trying to save: " + saveString);
 
         try {
-            File file = new File("PreviousSheet.txt");
+            File file = new File("../PreviousSheet.txt");
             OutputStream out = new FileOutputStream(file);
 
             if (file.exists()) {

@@ -88,9 +88,11 @@ class Menu {
      * if there is not we request an input from the user
      */
     private void drawPlaySheet() {
-        if (game.getSheet() == null) {
+        int[] sheetAttempt = stringArrayToIntArray(new Loader().loadPreviousSheet());
+        if (sheetAttempt.length < 1) {
             createInputFrame();
         } else {
+            game.addSheet(sheetAttempt);
             redraw();
         }
     }
@@ -118,7 +120,14 @@ class Menu {
         addSheet.addActionListener(actionEvent -> createInputFrame());
 
         //Terminates the program
-        quit.addActionListener(actionEvent -> System.exit(0));
+        quit.addActionListener(actionEvent -> {
+            if (new Loader().saveCurrentSheet(game.getSheet())) {
+                System.out.println("Save successful");
+            } else {
+                System.out.println("Save failed");
+            }
+            System.exit(0);
+        });
     }
 
     /**

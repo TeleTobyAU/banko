@@ -17,5 +17,4 @@ class Game {
     Sheet getSheet() {
         return sheet;
     }
-
 }

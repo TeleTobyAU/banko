@@ -45,6 +45,20 @@ class Menu {
     }
 
     /**
+     * Checks for a sheet in the game, if there is a sheet it is drawn
+     * if there is not we request an input from the user
+     */
+    private void drawPlaySheet() {
+        int[] sheetAttempt = stringArrayToIntArray(new Loader().loadPreviousSheet());
+        if (sheetAttempt.length < 1) {
+            createInputFrame();
+        } else {
+            game.addSheet(sheetAttempt);
+            redraw();
+        }
+    }
+
+    /**
      * The redraw method draws the whole menu from scratch
      * Used in initial setup, but also for reset
      */
@@ -67,11 +81,12 @@ class Menu {
         setPlayButtons();
         setPlayButtonFunction();
         resetPlayButtonsColor();
+        makePlayButtonsPretty();
 
         frame.add(menuPanel);
         frame.add(gamePanel);
 
-        frame.setSize(600, 420);
+        frame.setSize(new Dimension(800, 400));
         frame.setLayout(new GridLayout(1, 2));
         frame.setVisible(true);
     }
@@ -86,26 +101,15 @@ class Menu {
     }
 
     /**
-     * Checks for a sheet in the game, if there is a sheet it is drawn
-     * if there is not we request an input from the user
-     */
-    private void drawPlaySheet() {
-        int[] sheetAttempt = stringArrayToIntArray(new Loader().loadPreviousSheet());
-        if (sheetAttempt.length < 1) {
-            createInputFrame();
-        } else {
-            game.addSheet(sheetAttempt);
-            redraw();
-        }
-    }
-
-    /**
      * Next 3 methods are for setting up the menu buttons, their functions and adding them to the menupanel
      */
     private void createMenuButtons() {
         reset = new JButton("Reset");
+        makeButtonPretty(reset);
         addSheet = new JButton("Add a new sheet");
+        makeButtonPretty(addSheet);
         quit = new JButton("Quit");
+        makeButtonPretty(quit);
     }
 
     private void setMenuButtons() {
@@ -204,6 +208,17 @@ class Menu {
                 counter--;
             }
         });
+    }
+
+    private void makePlayButtonsPretty() {
+        for (JButton b : playButtons) {
+            b.setMinimumSize(new Dimension(40, 40));
+            makeButtonPretty(b);
+        }
+    }
+
+    private void makeButtonPretty(JButton b) {
+            b.setFont(new Font("HelveticaNeue", Font.BOLD, 25));
     }
 
     /**

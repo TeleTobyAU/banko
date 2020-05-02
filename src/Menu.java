@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.*;
 
 /**
@@ -172,14 +174,36 @@ class Menu {
 
     private void setPlayButtonFunction() {
         for (JButton b : playButtons) {
-            b.addActionListener(actionEvent -> {
-                b.setBackground(Color.GREEN);
-                counter++;
-                bingoBanko();
-                b.setEnabled(false);
-            });
+            setMarkFunction(b);
             gamePanel.add(b);
         }
+        }
+
+    private void setMarkFunction(JButton b) {
+        b.setBackground(Color.GRAY);
+        b.addActionListener(actionEvent -> {
+            b.setBackground(Color.GREEN);
+            counter++;
+            bingoBanko();
+            setUnmarkFunction(b);
+        });
+    }
+
+    private void setUnmarkFunction(JButton b) {
+        b.removeActionListener(b.getActionListeners()[0]);
+        b.addActionListener(e -> {
+            int result = JOptionPane.showConfirmDialog( null,
+                    "Are you sure you want to unmark " + b.getText() + "?",
+                    "Unmarking " + b.getText(), JOptionPane.OK_CANCEL_OPTION);
+            if (result == 0) {
+                for( ActionListener al : b.getActionListeners() ) {
+                    b.removeActionListener( al );
+                }
+                setMarkFunction(b);
+                b.repaint();
+                counter--;
+            }
+        });
     }
 
     /**

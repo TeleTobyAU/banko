@@ -187,6 +187,7 @@ class Menu {
         b.setBackground(Color.GRAY);
         b.addActionListener(actionEvent -> {
             b.setBackground(Color.GREEN);
+            b.setForeground(Color.black);
             counter++;
             bingoBanko();
             setUnmarkFunction(b);
@@ -205,6 +206,7 @@ class Menu {
                 }
                 setMarkFunction(b);
                 b.repaint();
+                makeButtonPretty(b);
                 counter--;
             }
         });
@@ -219,6 +221,8 @@ class Menu {
 
     private void makeButtonPretty(JButton b) {
             b.setFont(new Font("HelveticaNeue", Font.BOLD, 25));
+            b.setBackground(Color.black);
+            b.setForeground(Color.white);
     }
 
     /**
@@ -241,25 +245,25 @@ class Menu {
 
         if (userInput == null && firstRun) {
             System.exit(0);
-        } else if (userInput == null) {
+        } else if (userInput == null || userInput.length() < 1) {
             redraw();
         } else {
-            int[] input = stringArrayToIntArray(userInput.split("\\s+")); //Splits a whitespaces
+                int[] input = stringArrayToIntArray(userInput.split("\\s+")); //Splits a whitespaces
 
-            boolean correctAmountOfNumbers = input.length == 15;
-            boolean duplicates = !checkDuplicates(input);
-            boolean numbersWithinOneAndNinety = allowedNumbers(input);
+                boolean correctAmountOfNumbers = input.length == 15;
+                boolean duplicates = !checkDuplicates(input);
+                boolean numbersWithinOneAndNinety = allowedNumbers(input);
 
-            boolean legalInput = correctAmountOfNumbers && !duplicates && numbersWithinOneAndNinety;
+                boolean legalInput = correctAmountOfNumbers && !duplicates && numbersWithinOneAndNinety;
 
-            if (!legalInput) {
-                JOptionPane.showMessageDialog(frame, "You have to enter 15 unique numbers between 1 and 90");
-                createInputFrame();
-            } else {
-                game.addSheet(input);
+                if (!legalInput) {
+                    JOptionPane.showMessageDialog(frame, "You have to enter 15 unique numbers between 1 and 90");
+                    createInputFrame();
+                } else {
+                    game.addSheet(input);
+                }
+                redraw();
             }
-            redraw();
-        }
         firstRun = false;
     }
 
